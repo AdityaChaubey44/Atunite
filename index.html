@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atunite - College Marketplace & Lost Found</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(255, 0, 150, 0.1);
+            border-bottom: 1px solid rgba(255, 0, 150, 0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff0096;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 20px rgba(255, 0, 150, 0.5);
+        }
+
+        .logo::before {
+            content: "🎓";
+            font-size: 1.8rem;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 150, 0.7));
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: linear-gradient(45deg, #ff0096, #00d4ff);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 150, 0.4);
+        }
+
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .cta-primary {
+            background: linear-gradient(45deg, #ff0096, #ff6b6b);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 0, 150, 0.4);
+        }
+
+        .cta-secondary {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 40px 0;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 0, 150, 0.1);
+        }
+
+        .section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #e0e0e0;
+            text-shadow: 0 0 20px rgba(255, 0, 150, 0.3);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #ff0096 0%, #00d4ff 100%);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(255, 0, 150, 0.2);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(255, 0, 150, 0.4);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .marketplace-section {
+            background: linear-gradient(135deg, #ff0096 0%, #ff6b6b 100%);
+        }
+
+        .lost-found-section {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+        }
+
+        .how-it-works {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            padding: 80px 0;
+        }
+
+        .how-it-works h2 {
+            color: #e0e0e0;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(255, 0, 150, 0.2);
+            color: #e0e0e0;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            background: linear-gradient(45deg, #ff0096, #00d4ff);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0 auto 1rem;
+            box-shadow: 0 5px 15px rgba(255, 0, 150, 0.4);
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 0, 150, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            color: #ff0096;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 0, 150, 0.5);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .auth-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            background: transparent;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .signup-btn {
+            background: linear-gradient(45deg, #ff0096, #00d4ff);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 0, 150, 0.4);
+        }
+
+        .auth-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .rewards-info {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 150, 0.3);
+        }
+
+        .rewards-info h4 {
+            color: #ff0096;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            text-shadow: 0 0 10px rgba(255, 0, 150, 0.5);
+        }
+
+        .rewards-info p {
+            color: #e0e0e0;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #3498db;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 40%;
+            left: 70%;
+            animation-delay: 4s;
+        }
+
+        .floating-shape:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            right: 30%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Atunite</a>
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#marketplace">Marketplace</a></li>
+                    <li><a href="#lost-found">Lost & Found</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="auth-btn login-btn" id="loginBtn" onclick="openModal('loginModal')">Login</button>
+                    <button class="auth-btn signup-btn" id="signupBtn" onclick="openModal('signupModal')">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Welcome to Atunite</h1>
+            <p><strong>"One Campus, One Market, One Click"</strong></p>
+            <p style="font-style: italic; margin-top: 1rem; font-size: 1.1rem; opacity: 0.9;">"If it was meant to be yours, it'll find its way to you"</p>
+            <p style="margin-top: 1.5rem; font-size: 1.1rem;">Your college community marketplace for buying, selling, and finding lost items. Connect with fellow students in the coolest way possible!</p>
+            <div class="cta-buttons">
+                <a href="#marketplace" class="cta-button cta-primary">Start Trading</a>
+                <a href="#lost-found" class="cta-button cta-secondary">Lost & Found</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="features" class="section">
+            <h2>Why Choose Atunite?</h2>
+            <div class="features-grid">
+                <div class="feature-card marketplace-section">
+                    <span class="feature-icon">🛒</span>
+                    <h3>Student Marketplace</h3>
+                    <p>Buy and sell second-hand items within your college community. From textbooks to calculators, find great deals from seniors and sell to juniors easily and safely.</p>
+                </div>
+                <div class="feature-card lost-found-section">
+                    <span class="feature-icon">🔍</span>
+                    <h3>Lost & Found Hub</h3>
+                    <p>Lost something on campus? Post it here! Found someone's item? Help them out and earn reward points. Our community-driven system keeps campus items safe.</p>
+                </div>
+            </div>
+            
+            <div class="rewards-info">
+                <h4>🏆 Reward System</h4>
+                <p>Earn credit points for helping fellow students find their lost items! Monthly limits ensure fairness and prevent abuse. Be a campus hero and get rewarded for your kindness.</p>
+            </div>
+        </section>
+    </div>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>Sign Up</h4>
+                    <p>Create your account using your college email address</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>Post Items</h4>
+                    <p>List items to sell or report lost belongings with photos</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>Connect</h4>
+                    <p>Chat with buyers/sellers or help find lost items</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>Exchange</h4>
+                    <p>Complete transactions safely on campus</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <h2>Join Our Growing Community</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>500+</h3>
+                    <p>Active Students</p>
+                </div>
+                <div class="stat-item">
+                    <h3>1200+</h3>
+                    <p>Items Traded</p>
+                </div>
+                <div class="stat-item">
+                    <h3>250+</h3>
+                    <p>Items Found</p>
+                </div>
+                <div class="stat-item">
+                    <h3>98%</h3>
+                    <p>Success Rate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Atunite</h4>
+                    <p>Connecting college students through smart trading and community support.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#marketplace">Marketplace</a>
+                    <a href="#lost-found">Lost & Found</a>
+                    <a href="#how-it-works">How It Works</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Safety Guidelines</a>
+                    <a href="#">Contact Us</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Community Guidelines</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Atunite. Made with ❤️ for college students.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login to Atunite</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginUSN">College USN</label>
+                    <input type="text" id="loginUSN" placeholder="Enter your USN" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">8-Digit Password</label>
+                    <input type="password" id="loginPassword" maxlength="8" minlength="8" placeholder="Enter 8-digit password" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Join Atunite</h2>
+            <form onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupUSN">College USN</label>
+                    <input type="text" id="signupUSN" placeholder="Enter your USN" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupDOB">Date of Birth</label>
+                    <input type="date" id="signupDOB" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Create 8-Digit Password</label>
+                    <input type="password" id="signupPassword" maxlength="8" minlength="8" placeholder="Create 8-digit password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" maxlength="8" minlength="8" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="submit-btn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Update active nav link
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.backdropFilter = 'blur(25px)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.backdropFilter = 'blur(20px)';
+            }
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Form handlers
+        function handleLogin(event) {
+    event.preventDefault();
+
+    const usn = document.getElementById('loginUSN').value;
+    const password = document.getElementById('loginPassword').value;
+
+    if (!/^[0-9]{8}$/.test(password)) {
+        return alert('Password must be exactly 8 digits!');
+    }
+
+    fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usn, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.msg === 'Login successful') {
+            alert(`Welcome back ${data.user.name}!`);
+            closeModal('loginModal');
+
+            localStorage.setItem("user", JSON.stringify(data.user));
+        } else {
+            alert(data.msg || 'Login failed');
+        }
+    })
+    .catch(err => {
+        console.error('Login error:', err);
+        alert('Server error during login');
+    });
+}
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const usn = document.getElementById('signupUSN').value;
+            const dob = document.getElementById('signupDOB').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (password !== confirmPassword) {
+        return alert('Passwords do not match!');
+    }
+
+    if (!/^[0-9]{8}$/.test(password)) {
+        return alert('Password must be exactly 8 digits!');
+    }
+
+    fetch('http://localhost:5000/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, usn, dob, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.msg === 'Signup successful') {
+            alert('Signup successful! Now you can login.');
+            closeModal('signupModal');
+        } else {
+            alert(data.msg || 'Signup failed');
+        }
+    })
+    .catch(err => {
+        console.error('Signup error:', err);
+        alert('Server error during signup');
+    });
+        }       
+
+        function showLoggedInUI(user) {
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+
+    if (loginBtn) loginBtn.textContent = "Logged in ✅";
+    if (signupBtn) signupBtn.style.display = "none";
+
+    const profile = document.createElement("div");
+    profile.classList.add("profile-dropdown");
+    profile.innerHTML = `
+        <button class="profile-btn">${user.name.split(" ")[0]} ▼</button>
+        <div class="profile-menu">
+            <p><strong>Name:</strong> ${user.name}</p>
+            <p><strong>USN:</strong> ${user.usn}</p>
+            <p><strong>Credits:</strong> ${user.credits ?? 0}</p>
+            <button onclick="logoutUser()">Logout</button>
+        </div>
+    `;
+
+    document.querySelector(".auth-buttons").appendChild(profile);
+}
+
+
+function logoutUser() {
+    localStorage.removeItem("user");
+    window.location.reload();
+}
+        // Add interactive effects to cards
+        document.querySelectorAll('.feature-card, .step-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Counter animation for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-item h3');
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent);
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target + (counter.textContent.includes('%') ? '%' : '+');
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.ceil(current) + (counter.textContent.includes('%') ? '%' : '+');
+                    }
+                }, 20);
+            });
+        }
+
+        // Trigger counter animation when stats section is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        observer.observe(document.querySelector('.stats-section'));
+
+        // Check if user is already logged in
+window.addEventListener("DOMContentLoaded", () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+        showLoggedInUI(user);
+    }
+});
+    </script>
+</body>
+</html>
