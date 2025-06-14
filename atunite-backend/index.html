@@ -835,10 +835,13 @@
     }
 
     fetch('https://atunite-backend.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usn, password })
-    })
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    usn: 'yourusn',
+    password: 'yourpassword'
+  })
+})
     .then(res => res.json())
     .then(data => {
         if (data.msg === 'Login successful') {
