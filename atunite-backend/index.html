@@ -834,7 +834,7 @@
         return alert('Password must be exactly 8 digits!');
     }
 
-    fetch('http://localhost:5000/api/auth/login', {
+    fetch('https://atunite-backend.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usn, password })
@@ -872,7 +872,7 @@
         return alert('Password must be exactly 8 digits!');
     }
 
-    fetch('http://localhost:5000/api/auth/signup', {
+    fetch('https://atunite-backend.onrender.com/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, usn, dob, password })
