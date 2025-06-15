@@ -1,14 +1,13 @@
 // routes/marketplace.js
 const express = require('express');
-const Item = require('../models/item'); // ✔️ filename is lowercase, variable capitalized
-
 const router = express.Router();
+const Item = require('../models/item'); // ⬅️ file name lowercase, model name capital
 
-// ✅ POST: Add a new item
+// ✅ POST: Add new item
 router.post('/add', async (req, res) => {
-  const { title, description, price, sellerUSN, contact, image } = req.body;
+  const { title, description, price, image, sellerUSN, category } = req.body;
 
-  if (!title || !price || !sellerUSN || !contact) {
+  if (!title || !price || !sellerUSN || !category) {
     return res.status(400).json({ msg: 'Missing required fields' });
   }
 
@@ -17,25 +16,25 @@ router.post('/add', async (req, res) => {
       title,
       description,
       price,
+      image,
       sellerUSN,
-      contact,
-      image
+      category
     });
 
-    await newItem.save(); // ✔️ Fixed spelling & capitalization
-    res.status(201).json({ msg: 'Item listed successfully', item: newItem });
+    await newItem.save();
+    res.status(201).json({ msg: 'Item added successfully', item: newItem });
   } catch (err) {
     res.status(500).json({ msg: 'Server error', error: err });
   }
 });
 
-// ✅ GET: Fetch all listed items
+// ✅ GET: View all items
 router.get('/all', async (req, res) => {
   try {
-    const items = await Item.find().sort({ datePosted: -1 }); // ✔️ Use correct variable name
+    const items = await Item.find().sort({ datePosted: -1 });
     res.json(items);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err });
+    res.status(500).json({ msg: 'Error fetching items', error: err });
   }
 });
 

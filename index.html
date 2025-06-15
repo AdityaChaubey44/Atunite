@@ -605,7 +605,7 @@
             <p style="font-style: italic; margin-top: 1rem; font-size: 1.1rem; opacity: 0.9;">"If it was meant to be yours, it'll find its way to you"</p>
             <p style="margin-top: 1.5rem; font-size: 1.1rem;">Your college community marketplace for buying, selling, and finding lost items. Connect with fellow students in the coolest way possible!</p>
             <div class="cta-buttons">
-                <a href="#marketplace" class="cta-button cta-primary">Buy & Sell</a>
+                <a href="#" class="cta-button cta-primary" onclick="showBuySellPopup()">Buy & Sell</a>
                 <a href="#lost-found" class="cta-button cta-secondary">Lost & Found</a>
             </div>
         </div>
@@ -661,6 +661,42 @@
             </div>
         </div>
     </section>
+
+    <!-- 🔥 START: Hidden marketplace form inside div -->
+<div id="marketplaceSection" style="display: none;">
+    <section style="background-color: #121212; padding: 2rem; color: white; border-radius: 10px; max-width: 600px; margin: 2rem auto;">
+      <h2 style="color: #00ffc8;">List Your Item</h2>
+      <form id="marketplaceForm">
+        <input type="text" id="title" placeholder="Item Title" required><br><br>
+        <textarea id="description" placeholder="Description (optional)"></textarea><br><br>
+        <input type="number" id="price" placeholder="Price (₹)" required><br><br>
+        
+        <label>Upload Image:</label><br>
+        <input type="file" id="imageFile" accept="image/*"><br><br>
+  
+        <label>Or paste image URL:</label><br>
+        <input type="text" id="imageURL" placeholder="https://..." style="width: 100%;"><br><br>
+  
+        <input type="text" id="sellerUSN" placeholder="Your USN" required><br><br>
+
+        <label for="category">Select Category:</label><br>
+<select id="category" required style="width: 100%; padding: 8px; margin-bottom: 16px; border-radius: 5px;">
+  <option value="">-- Choose Category --</option>
+  <option value="Study Materials">📚 Study Materials</option>
+  <option value="Electronics">💻 Electronics</option>
+  <option value="Fashion">👕 Fashion</option>
+  <option value="Food">🍕 Food</option>
+  <option value="Others">📦 Others</option>
+</select><br><br>
+        
+  
+        <button type="submit" style="background-color: #00ffc8; color: black; font-weight: bold; border: none; padding: 10px 20px; border-radius: 5px;">Submit</button>
+      </form>
+      <p id="formStatus" style="margin-top: 1rem;"></p>
+    </section>
+  </div>
+
+     
 
     <section class="stats-section">
         <div class="container">
@@ -977,7 +1013,7 @@ window.addEventListener("DOMContentLoaded", () => {
     </script>
 
   <!-- Contact Us Button -->
-<button id="contactBtn" style="margin: 20px; padding: 10px 20px; background-color: #00ffc8; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+  <button id="contactBtn" style="margin: 20px; padding: 10px 20px; background-color: #00ffc8; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
     Contact Us
   </button>
   
@@ -987,16 +1023,16 @@ window.addEventListener("DOMContentLoaded", () => {
       <h2>Contact Us</h2>
   
       <p><strong>Founder:</strong> Aditya Chaubey<br>
-      Email: <a href="mailto:adityachaubey1972@gmail.com" style="color:#00ffc8;">adityachaubey1972@gmail.com</a></p>
+        Email: <a href="mailto:adityachaubey1972@gmail.com" style="color:#00ffc8;">adityachaubey1972@gmail.com</a></p>
   
       <p><strong>CEO:</strong> Anantha Narayan R Prabhu<br>
-      Email: <a href="mailto:ananthanarayanrprabhu@gmail.com" style="color:#00ffc8;">ananthanarayanrprabhu@gmail.com</a></p>
+        Email: <a href="mailto:ananthanarayanrprabhu@gmail.com" style="color:#00ffc8;">ananthanarayanrprabhu@gmail.com</a></p>
   
       <p><strong>CFO:</strong> Archit Kumar Marodia<br>
-      Email: <a href="mailto:architmarodia39@gmail.com" style="color:#00ffc8;">architmarodia39@gmail.com</a></p>
+        Email: <a href="mailto:architmarodia39@gmail.com" style="color:#00ffc8;">architmarodia39@gmail.com</a></p>
   
       <p><strong>Web Manager:</strong> Aditya Kumar Gupta<br>
-      Email: <a href="mailto:aditya80242@gmail.com" style="color:#00ffc8;">aditya80242@gmail.com</a></p>
+        Email: <a href="mailto:aditya80242@gmail.com" style="color:#00ffc8;">aditya80242@gmail.com</a></p>
   
       <br>
       <button onclick="document.getElementById('contactModal').style.display='none'" style="padding: 8px 20px; background: #00ffc8; border: none; color: black; border-radius: 5px; cursor: pointer;">Close</button>
@@ -1015,6 +1051,91 @@ window.addEventListener("DOMContentLoaded", () => {
       e.preventDefault(); // Stop default anchor behavior
       document.getElementById("contactModal").style.display = "block";
     };
+  </script>
+  
+  <!-- 🔥 START: Replaced Form Submission Script -->
+  <script>
+    document.getElementById("marketplaceForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+  
+      const fileInput = document.getElementById("imageFile");
+      const urlInput = document.getElementById("imageURL");
+      const status = document.getElementById("formStatus");
+  
+      let image = "";
+  
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          image = reader.result;
+          await submitForm(image);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        image = urlInput.value;
+        await submitForm(image);
+      }
+  
+      async function submitForm(finalImage) {
+        const data = {
+          title: document.getElementById("title").value,
+          description: document.getElementById("description").value,
+          price: Number(document.getElementById("price").value),
+          image: finalImage,
+          sellerUSN: document.getElementById("sellerUSN").value,
+          category: document.getElementById("category").value
+        };
+  
+        try {
+          const res = await fetch("https://atunite-backend.onrender.com/api/marketplace/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+          });
+  
+          const result = await res.json();
+          status.innerText = result.msg || "Item listed!";
+        } catch (err) {
+          status.innerText = "Error adding item.";
+          console.error(err);
+        }
+      }
+    });
+  </script>
+  <!-- 🔥 END -->
+  
+  <!-- ✅ Buy/Sell Popup Modal -->
+  <div id="buySellModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); z-index:999;">
+    <div style="background:#1f1f1f; padding:30px; border-radius:10px; width:300px; margin:15% auto; text-align:center; color:white; box-shadow: 0 0 15px #00ffc8">
+      <h3>Select an Option</h3>
+      <button onclick="chooseBuy()" style="margin: 10px; padding: 10px 20px; background-color: #00d4ff; color: white; border: none; border-radius: 5px;">Buy</button>
+      <button onclick="chooseSell()" style="margin: 10px; padding: 10px 20px; background-color: #ff0096; color: white; border: none; border-radius: 5px;">Sell</button>
+      <br><br>
+      <button onclick="closeModal()" style="background: transparent; color: #ccc; border: none; margin-top: 10px;">Cancel</button>
+    </div>
+  </div>
+  
+  <!-- ✅ Script to handle popup and form show -->
+  <script>
+    function showBuySellPopup() {
+      document.getElementById("buySellModal").style.display = "block";
+    }
+  
+    function closeModal() {
+      document.getElementById("buySellModal").style.display = "none";
+    }
+  
+    function chooseBuy() {
+      alert("Buy functionality coming soon!");
+      closeModal();
+    }
+  
+    function chooseSell() {
+      document.getElementById("marketplaceSection").style.display = "block";
+      document.getElementById("marketplaceSection").scrollIntoView({ behavior: 'smooth' });
+      closeModal();
+    }
   </script>
   
   </body>

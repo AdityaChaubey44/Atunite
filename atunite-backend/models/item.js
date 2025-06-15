@@ -11,15 +11,15 @@ const ItemSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  image: String, // optional: image URL or base64 string
   sellerUSN: {
     type: String,
     required: true
   },
-  contact: {
+  category: {
     type: String,
     required: true
   },
-  image: String, // (optional): can be image URL later
   datePosted: {
     type: Date,
     default: Date.now
