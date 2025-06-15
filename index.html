@@ -703,23 +703,12 @@
                     <h4>Support</h4>
                     <a href="#">Help Center</a>
                     <a href="#">Safety Guidelines</a>
-                    <a href="#">Contact Us</a>
+                    <!--<a href="#">Contact Us</a>
                     <section id="contact">
                         <h2>Contact Us</h2>
                       
-                        <p><strong>Founder:</strong> Aditya Chaubey<br>
-                            Email: <a href="mailto:adityachaubey1972@gmail.com">adityachaubey1972@gmail.com</a></p>
-                            
-                            <p><strong>CEO:</strong> Anantha Narayan R Prabhu<br>
-                            Email: <a href="mailto:ananthanarayanrprabhu@gmail.com">ananthanarayanrprabhu@gmail.com</a></p>
-                            
-                            <p><strong>CFO:</strong> Archit Kumar Marodia <br>
-                            Email: <a href="mailto:architmarodia39@gmail.com">architmarodia39@gmail.com</a></p>
-                            
-                            <p><strong>Web Manager:</strong> Aditya Kumar Gupta <br>
-                            Email: <a href="mailto:aditya80242@gmail.com">aditya80242@gmail.com.com</a></p>
-                      
                       </section>
+                    -->
                 </div>
                 <div class="footer-section">
                     <h4>Legal</h4>
@@ -986,5 +975,47 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 });
     </script>
-</body>
-</html>
+
+  <!-- Contact Us Button -->
+<button id="contactBtn" style="margin: 20px; padding: 10px 20px; background-color: #00ffc8; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+    Contact Us
+  </button>
+  
+  <!-- The Modal -->
+  <div id="contactModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);">
+    <div style="background: #1c1c1c; color: white; margin: 10% auto; padding: 20px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 0 10px #00ffc8;">
+      <h2>Contact Us</h2>
+  
+      <p><strong>Founder:</strong> Aditya Chaubey<br>
+      Email: <a href="mailto:adityachaubey1972@gmail.com" style="color:#00ffc8;">adityachaubey1972@gmail.com</a></p>
+  
+      <p><strong>CEO:</strong> Anantha Narayan R Prabhu<br>
+      Email: <a href="mailto:ananthanarayanrprabhu@gmail.com" style="color:#00ffc8;">ananthanarayanrprabhu@gmail.com</a></p>
+  
+      <p><strong>CFO:</strong> Archit Kumar Marodia<br>
+      Email: <a href="mailto:architmarodia39@gmail.com" style="color:#00ffc8;">architmarodia39@gmail.com</a></p>
+  
+      <p><strong>Web Manager:</strong> Aditya Kumar Gupta<br>
+      Email: <a href="mailto:aditya80242@gmail.com" style="color:#00ffc8;">aditya80242@gmail.com</a></p>
+  
+      <br>
+      <button onclick="document.getElementById('contactModal').style.display='none'" style="padding: 8px 20px; background: #00ffc8; border: none; color: black; border-radius: 5px; cursor: pointer;">Close</button>
+    </div>
+  </div>
+  
+  <!-- Script to Show Modal -->
+  <script>
+    // Navbar wala button
+    document.getElementById("contactBtn").onclick = function () {
+      document.getElementById("contactModal").style.display = "block";
+    };
+  
+    // Footer wala link
+    document.getElementById("contactBtnFooter").onclick = function (e) {
+      e.preventDefault(); // Stop default anchor behavior
+      document.getElementById("contactModal").style.display = "block";
+    };
+  </script>
+  
+  </body>
+  </html>
